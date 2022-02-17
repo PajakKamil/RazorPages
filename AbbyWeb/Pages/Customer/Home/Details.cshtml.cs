@@ -1,11 +1,14 @@
 using Abby.DataAccess.Repository.IRepository;
 using Abby.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 
 namespace AbbyWeb.Pages.Customer.Home
 {
+    [Authorize]
     public class DetailsModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -14,15 +17,39 @@ namespace AbbyWeb.Pages.Customer.Home
             _unitOfWork = unitOfWork;
 		}
 
-        public MenuItem MenuItem { get; set; }
-
         [BindProperty]
-        [Range(1, 10, ErrorMessage = "Please select a count between 1 and 10")]
-        public int Count { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
 
         public void OnGet(int id)
         {
-           MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(e=>e.Id == id, includeProperties: "Category,Food");
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ShoppingCart = new()
+            {
+                ApplicationUserId = claim.Value,
+                MenuItem = _unitOfWork.MenuItem.GetFirstOrDefault(e => e.Id == id, includeProperties: "Category,Food"),
+                MenuItemId = id,
+            };
         }
+
+        public async Task<IActionResult> OnPost()
+		{
+            if(!ModelState.IsValid)
+			    return Page();
+            ShoppingCart shoppingCartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(
+                filter: e => e.ApplicationUserId == ShoppingCart.ApplicationUserId &&
+                e.MenuItemId == ShoppingCart.MenuItemId);
+
+            if (shoppingCartFromDb == null)
+            {
+                _unitOfWork.ShoppingCart.Add(ShoppingCart);
+                _unitOfWork.Save();
+            }
+			else
+			{
+                _unitOfWork.ShoppingCart.IncrementCount(shoppingCartFromDb, ShoppingCart.Count);
+			}
+            return RedirectToPage("Index");
+		}
     }
 }

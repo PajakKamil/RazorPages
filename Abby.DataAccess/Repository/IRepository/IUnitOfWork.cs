@@ -11,6 +11,10 @@ namespace Abby.DataAccess.Repository.IRepository
 		ICategoryRepository Category { get; }
 		IFoodRepository Food { get; }
 		IMenuItemRepository MenuItem { get; }
+		IShoppingCartRepository ShoppingCart { get; }
+		IOrderHeaderRepository OrderHeader { get; }
+		IOrderDetailsRepository OrderDetails { get; }
+		IApplicationUserRepository ApplicationUser { get; }
 		void Save();
 	}
 }
