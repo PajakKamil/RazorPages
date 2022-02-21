@@ -10,5 +10,6 @@ namespace Abby.DataAccess.Repository.IRepository
 	public interface IOrderHeaderRepository : IRepository<OrderHeader>
 	{
 		void Update(OrderHeader orderHeaer);
+		void UpdateStatus(int id, string status);
 	}
 }

@@ -1,0 +1,32 @@
+﻿@page
+@model AbbyWeb.Pages.Admin.Order.OrderListModel
+
+<partial name="Shared/_Notification"/>
+
+<div class="container p-3">
+	<div class="row pt-4">
+		<div class="col-6">
+			<h2 class="text-primary">Order List</h2>
+		</div>
+	</div>
+	
+	<br/><br/>
+	
+	<table id="DT_load" class="table table-bordered table-striped text-dark" style="width: 100%">
+		<thead>
+		<tr>
+			<th>ORDER ID</th>
+			<th>NAME</th>
+			<th>EMAIL</th>
+			<th>ORDER TOTAL</th>
+			<th>PICKUP TIME</th>
+			<th></th>
+		</tr>
+		</thead>
+	</table>
+</div>
+
+@section Scripts
+{
+	<script src="~/js/orderlist.js"></script>
+}

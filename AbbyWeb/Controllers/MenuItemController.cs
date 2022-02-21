@@ -10,7 +10,7 @@ namespace AbbyWeb.Controllers
 	{
 
 		private readonly IUnitOfWork _unitOfWork;
-		private readonly IWebHostEnvironment _webHostEnvironment;
+		private readonly IWebHostEnvironment _webHostEnvironment; //Do plików, jeśnie nie operujesz na plikach - usuń
 
 		public MenuItemController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
 		{
