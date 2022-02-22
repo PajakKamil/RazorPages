@@ -111,6 +111,8 @@ namespace AbbyWeb.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                //Login w bazie danych jest malymi literami, metoda porównuje duże litery z małymi i powoduje error, musi być takie same
+                //dlatego albo ToLower() albo ToUpper();
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {

@@ -1,9 +1,25 @@
 ﻿var dataTable;
 
 $(Document).ready(function () {
+	var url = window.location.search;
+	if (url.includes("cancelled")) {
+		loadList("cancelled")
+	}
+	else if (url.includes("ready")) {
+		loadList("ready")
+	}
+	else if (url.includes("completed")) {
+		loadList("completed")
+	}
+	else {
+		loadList("inProcess")
+	}
+});
+
+function loadList(param) {
 	dataTable = $('#DT_load').DataTable({
 		"ajax": {
-			"url": "/api/orderlist",
+			"url": "/api/orderList?status="+param,
 			"type": "GET",
 			"datatype": "json"
 		},
@@ -29,4 +45,4 @@ $(Document).ready(function () {
 		],
 		"width": "100%"
 	});
-});
+}
