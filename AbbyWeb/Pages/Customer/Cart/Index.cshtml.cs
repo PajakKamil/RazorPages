@@ -1,5 +1,6 @@
 using Abby.DataAccess.Repository.IRepository;
 using Abby.Models;
+using Abby.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -32,7 +33,6 @@ namespace AbbyWeb.Pages.Customer.Cart
 				{
                     CartTotal += (cart.MenuItem.Price * cart.Count);
 				}
-                CartTotal = Math.Round(CartTotal, 2);
             }
         }
 
@@ -47,7 +47,9 @@ namespace AbbyWeb.Pages.Customer.Cart
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(e => e.Id == CartId);
             if (cart.Count == 1)
+            {
                 OnPostRemove(CartId);
+            }
             _unitOfWork.ShoppingCart.DecrementCound(cart, 1);
             return RedirectToPage("/Customer/Cart/Index");
         }
@@ -55,8 +57,10 @@ namespace AbbyWeb.Pages.Customer.Cart
         public IActionResult OnPostRemove(int CartId)
         {
             var cart = _unitOfWork.ShoppingCart.GetFirstOrDefault(e => e.Id == CartId);
+            var count = _unitOfWork.ShoppingCart.GetAll(e => e.ApplicationUserId == cart.ApplicationUserId).ToList().Count-1;
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(SD.SessionCart, count);
             return RedirectToPage("/Customer/Cart/Index");
         }
     }

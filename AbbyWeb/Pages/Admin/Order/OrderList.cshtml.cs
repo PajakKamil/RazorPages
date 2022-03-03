@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AbbyWeb.Pages.Admin.Order
 {
-    [Authorize]
+    [Authorize(Roles = $"{SD.ManagerRole},{SD.FrontDeskRole}")]
     public class OrderListModel : PageModel
     {
         public void OnGet()

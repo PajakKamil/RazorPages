@@ -1,13 +1,16 @@
 using System.Net;
 using Abby.DataAccess.Repository.IRepository;
 using Abby.Models;
+using Abby.Utility;
 using AbbyWeb.DataAccess.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AbbyWeb.Pages.Admin.MenuItems
 {
+	[Authorize(Roles = $"{SD.ManagerRole},{SD.KitchenRole}")]
 	[BindProperties]
 	public class UpsertModel : PageModel
 	{
